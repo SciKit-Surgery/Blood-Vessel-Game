@@ -1,0 +1,25 @@
+{
+  "name": "Cut-The-String",
+  "version": "0.0.1",
+  "description": "A browser game looking at the challenges of minimally invasive surgery.",
+  "repository": "https://www.github.com/SciKit-Surgery/cut-the-string",
+  "author": "Stephen Thompson",
+  "license": "BSD3",
+  "private": true,
+  "devDependencies": {
+    "babel-core": "6",
+    "babel-loader": "^7.0.0",
+    "babel-preset-env": "^1.0.0",
+    "copy-webpack-plugin": "^4.0.0",
+    "raw-loader": "^0.5.1",
+    "standard": "^17.0.0",
+    "webpack": "^3.0.0",
+    "webpack-dev-server": "^2.0.0"
+  },
+  "dependencies": {
+    "phaser": "^3.0.0"
+  },
+  "scripts": {
+    "lint": "standard src/*"
+  }
+}
