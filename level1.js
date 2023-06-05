@@ -7,7 +7,7 @@ window.onload = function() {
             autoCenter: Phaser.Scale.CENTER_BOTH,
             parent: "thegame",
             width: 600,
-            height: 250
+            height: 700
         },
         scene: scene1,
         physics: {
@@ -22,30 +22,36 @@ window.onload = function() {
     }
     level1 = new Phaser.Game(gameConfig);
     window.focus();
+
 }
 class scene1 extends Phaser.Scene{
     constructor(){
         super("PlayGame");
     }
+
+    
     create(){
 
         this.matter.world.update30Hz();
-       this.matter.world.setBounds(10, 10, level1.config.width - 20, level1.config.height - 10);
-        this.matter.add.rectangle(level1.config.width / 3 - 10, level1.config.width / 5, 600, 100); // 2 = how high up the artery starts to fall
+        this.matter.world.setBounds(10, 10, level1.config.width - 20, level1.config.height - 10);
+        const rect = this.add.rectangle(level1.config.width / 2, level1.config.width / 3, 600, 100, 0xff0000);
         this.lineGraphics = this.add.graphics();
         this.input.on("pointerdown", this.startDrawing, this);
         this.input.on("pointerup", this.stopDrawing, this);
         this.input.on("pointermove", this.keepDrawing, this);
         this.isDrawing = false;
         this.add.text(13, 11, 'Level 1',{fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'});
+
+
     }
+
     startDrawing(){
         this.isDrawing = true;
     }
     keepDrawing(pointer){
         if(this.isDrawing){
             this.lineGraphics.clear();
-            this.lineGraphics.lineStyle(1, 0x00ff00);
+            this.lineGraphics.lineStyle(1, 0xff0000);
             this.lineGraphics.moveTo(pointer.downX, pointer.downY);
             this.lineGraphics.lineTo(pointer.x, pointer.y);
             this.lineGraphics.strokePath();
@@ -92,5 +98,9 @@ class scene1 extends Phaser.Scene{
     
         }.bind(this))
     }
+
+    
+
 };
+
 
