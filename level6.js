@@ -35,8 +35,10 @@ class scene6 extends Phaser.Scene{
 
         this.matter.world.update30Hz();
         this.matter.world.setBounds(10, 10, level6.config.width - 20, level6.config.height - 20);
-        const polygon = this.add.polygon(200, 200, [720,20, 600,-20, 400,20, 250,-20, 110,20, 110,80, 250,40, 400,80 ,600,40 ,720,80], 0xff0000).setInteractive();
+	const verts = this.matter.verts.fromPath('720 20  600 -20  400 20  250 -20  110 20  110 80  250 40  400 80  600 40  720 80');
+        const polygon = this.add.polygon(200, 200, verts, 0xff0000).setInteractive();
         this.lineGraphics = this.add.graphics();
+	this.matter.add.fromVertices(240,  190, verts)
         this.input.on("pointerdown", this.startDrawing, this);
         this.input.on("pointerup", this.stopDrawing, this);
         this.input.on("pointermove", this.keepDrawing, this);
@@ -68,7 +70,9 @@ class scene6 extends Phaser.Scene{
             vertices.forEach(function(vertex){
                 pointsArray.push(vertex.x, vertex.y)
             });
+	    console.log(pointsArray)
             let slicedPolygons = PolyK.Slice(pointsArray, pointer.downX, pointer.downY, pointer.upX, pointer.upY);
+	    console.log(slicedPolygons.length)
             if(slicedPolygons.length > 1){
                 toBeSliced.push(bodies[i]);
                 slicedPolygons.forEach(function(points){
