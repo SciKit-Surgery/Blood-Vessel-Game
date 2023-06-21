@@ -34,12 +34,23 @@ class scene1 extends Phaser.Scene{
         super("PlayGame");
     }
 
-preload(){
-    this.load.image('mask', 'blood.jpg');
-    }
+
 
 create(){
-    var mask = this.add.image(400, 300, 'mask');
+
+    //mask for graphic effects
+
+    var graphics = this.add.graphics();
+    var mask = new Phaser.Display.Masks.GeometryMask(this, graphics);
+    graphics.fillStyle(0xff0000, 0.5);
+    graphics.fillRect(0, 0, 800, 700);
+
+    var image = this.add.image(400, 300, 'blood.jpg');
+    image.mask = mask;
+    //maskSprite.setTexture('image');
+  
+    //this.mask.gameObject.setMask(mask);
+    //mask.bringToTop();
 
     //var shape = this.add.graphics();
     //var mask = shape.add.bitmapMask();
@@ -54,8 +65,6 @@ create(){
         this.isDrawing = false;
         this.add.text(13, 11, 'Level 1',{fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'});
         counterText = this.add.text(13, 32, 'Attempts: ' + counter1, {fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'});
-
-
     }
 
 
