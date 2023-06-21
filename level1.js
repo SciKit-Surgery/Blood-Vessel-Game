@@ -1,3 +1,4 @@
+//import file here
 let level1;
 window.onload = function() {
     let gameConfig = {
@@ -25,39 +26,51 @@ window.onload = function() {
 
 }
 //document.body.style = 'margin:0;';
-let counter = 0;
+let counter1 = 0;
 let counterText; // variable for text object
-let updateText;
 this.counterText = null;
 class scene1 extends Phaser.Scene{
     constructor(){
         super("PlayGame");
     }
-create(){
 
-    
+preload(){
+    this.load.image('mask', 'blood.jpg');
+    }
+
+create(){
+    var mask = this.add.image(400, 300, 'mask');
+
+    //var shape = this.add.graphics();
+    //var mask = shape.add.bitmapMask();
+
     let path = [{x:0, y:0}, {x:level1.config.width, y:0}, {x:level1.config.width, y:50},{x: 0, y:50} ];
         this.polygon = this.matter.add.fromVertices(level1.config.width/2, 250, path, { isStatic: true });
-        this.polygon.gameObject = this.add.polygon(level1.config.width/2, 250, path, 0xff0000);
+        this.polygon.gameObject = this.add.polygon(level1.config.width/2, 250, path, '0xff0000');
         this.lineGraphics = this.add.graphics();
         this.input.on("pointerdown", this.startDrawing, this);
         this.input.on("pointerup", this.stopDrawing, this);
         this.input.on("pointermove", this.keepDrawing, this);
         this.isDrawing = false;
         this.add.text(13, 11, 'Level 1',{fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'});
-        counterText = this.add.text(13, 32, 'Attempts: ' + counter, {fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'});
+        counterText = this.add.text(13, 32, 'Attempts: ' + counter1, {fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'});
+
+
     }
-    
+
+
+ 
     startDrawing(pointer){
         this.isDrawing = true;
-        counter = counter + 1;
+        counter1 = counter1 + 1;
     }
 
     update(){
-        if (counter > 0){
+        if (counter1 > 0){
             counterText.setVisible(false);
-            counterText = this.add.text(13, 32,'Attempts: ' + counter, {fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'});
+            counterText = this.add.text(13, 32,'Attempts: ' + counter1, {fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'});
         }
+
          
     }
 
