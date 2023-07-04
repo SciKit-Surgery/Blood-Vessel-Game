@@ -1,4 +1,4 @@
-let level6;
+let level4;
 window.onload = function() {
     let gameConfig = {
         transparent: true,
@@ -7,40 +7,34 @@ window.onload = function() {
             mode: Phaser.Scale.FIT,
             autoCenter: Phaser.Scale.CENTER_BOTH,
             parent: "thegame",
-            width: 800,
+            width: 600,
             height: 700
         },
-        scene: scene6,
+        scene: scene4,
         physics: {
             default: "matter",
             matter: {
                 gravity: {
                     y: 0
                 },
-                debug: false,
+                debug: true,
             }
         }
     }
-    level6 = new Phaser.Game(gameConfig);
+    level4 = new Phaser.Game(gameConfig);
     window.focus();
-
 }
-let counter6 = 0;
-let counterText; // variable for text object
+let counter4 = 0;
 this.levelText;
-this.counterText = null;
-this.light = null;
-this.linePoints = [];
-class scene6 extends Phaser.Scene{
+this.counterText;
+class scene4 extends Phaser.Scene{
     constructor(){
-        super("PlayGame");
-        
+        super();
     }
 
 
-
-create(){
-    let graphics = this.add.graphics();
+    create(){
+        let graphics = this.add.graphics();
         this.path = new Phaser.Curves.Path(0, 300);
 
         for (let i = 0; i < 8; i++)
@@ -57,52 +51,29 @@ create(){
         this.input.on("pointerup", this.stopDrawing, this);
         this.input.on("pointermove", this.keepDrawing, this);
         this.isDrawing = false;
-        this.levelText = this.add.text(13, 11, 'Level 6',{fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'});
-        counterText = this.add.text(13, 32, 'Attempts: ' + counter6, {fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'});
-        //black mask
-        let cover = this.add.rectangle(800,400,-2000,1000, 0x000000, 1);
-        //torch
-        let torch = this.add.circle(100, 100, 80, 0x000000, 1);
-        torch.visible = false;
-        const x = 400
-        const y = 300
-        cover.mask = new Phaser.Display.Masks.BitmapMask(this, torch);
-        cover.mask.invertAlpha = true;
-        this.input.on("pointermove", function (pointer){
-            let x = pointer.x;
-            let y = pointer.y
-            torch.x = x;
-            torch.y = y;
-        }); 
-}
+        this.levelText = this.add.text(13, 11, 'Level 4',{fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'});
+
+    }
+           
     startDrawing(pointer){
         this.isDrawing = true;
         counter6 = counter6 + 1;
     }
     update(){
-        //update counter
-        if (counter6 > 0){
+        if (counter4 > 0){
             counterText.setVisible(false);
-            counterText = this.add.text(13, 32,'Attempts: ' + counter6, {fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'});
-            //update time
-            //var elapsedSeconds = Math.floor(this.time.now / 1000);
-            //timerText.setText('Time: ', + elapsedSeconds);
+            counterText = this.add.text(13, 32,'Attempts: ' + counter6, {fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'});       
         }
-         
     }
-
     keepDrawing(pointer){
         if(this.isDrawing){
             this.lineGraphics.clear();
             this.lineGraphics.lineStyle(15, 'black');
             this.lineGraphics.moveTo(pointer.downX, pointer.downY);
             this.lineGraphics.lineTo(pointer.x, pointer.y);
-            this.lineGraphics.closePath();
             this.lineGraphics.strokePath();
-
         }
     }
-    
     stopDrawing(pointer){
         let points = this.path.getPoints(100);
         let drawnLine = new Phaser.Geom.Line(pointer.downX, pointer.downY, pointer.upX, pointer.upY);
