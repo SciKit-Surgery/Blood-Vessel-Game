@@ -31,6 +31,8 @@ this.levelText;
 this.counterText = null;
 this.light = null;
 this.linePoints = [];
+let timer;
+let timerText;
 class scene7 extends Phaser.Scene{
     constructor(){
         super("PlayGame");
@@ -88,14 +90,29 @@ create(){
         }); 
         this.levelText = this.add.text(13, 11, 'Level 7',{fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'});
         counterText = this.add.text(13, 32, 'Attempts: ' + counter7, {fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'});
-        this.add.text(13, 52, 'Cut the blood vessel with 2 black circles', {fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'});
+        this.add.text(13, 72, 'Cut the blood vessel with 2 black circles', {fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'});
         
+        // Create and start the timer
+        timer = this.time.addEvent({
+            delay: 100000, // 3 second
+            paused: false
+        });
+        this.input.on('pointerup',
+            function () {
+                timer.paused = !timer.paused;
+            });
+
+    timerText = this.add.text(10, 52, 'Time: 0', {fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'});
+
 }
     startDrawing(pointer){
         this.isDrawing = true;
         counter7 = counter7 + 1;
     }
     update(){
+        //update timer
+        let elapsedSeconds = Math.floor(timer.getElapsedSeconds());
+        timerText.setText('Time: ' + elapsedSeconds);
         //update counter
         if (counter7 > 0){
             counterText.setVisible(false);
