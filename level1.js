@@ -29,15 +29,17 @@ window.onload = function() {
 let counter1 = 0;
 let levelText;
 let counterText; // variable for text object
+let timer;
+let timerText;
+let maximum = 20;
 this.counterText = null;
+
+
 class scene1 extends Phaser.Scene{
     constructor(){
         super("PlayGame");
-        this.light = null;
     }
-
-
-
+//preload the blood image to go over the top of the whole game
 create(){
 
     let path = [{x:0, y:0}, {x:level1.config.width, y:0}, {x:level1.config.width, y:50},{x: 0, y:50} ];
@@ -51,40 +53,32 @@ create(){
     levelText = this.add.text(13, 11, 'Level 1',{fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'});
     counterText = this.add.text(13, 32, 'Attempts: ' + counter1, {fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'});
 
-    //torch code
-    this.light = this.add.circle(0, 0, 30, 0x000000, 1);
-    this.light.visible = false;
+    // Create and start the timer
+    timer = this.time.addEvent({
+        delay: 100000, // 3 second
+        paused: false
+    });
+    this.input.on('pointerup',
+        function () {
+            timer.paused = !timer.paused;
+        });
 
-    this.input.on(Phaser.Input.Events.POINTER_MOVE, this.handlePointermove, this);
+    timerText = this.add.text(10, 53, 'Time: 0', {fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'});
 }
 
-handlePointerMove(pointer){
-
-    const x = pointer.x - this.cover.x + this.cover.width * 0.5
-    const y = pointer.y - this.cover.y + this.cover.height * 0.5
-
-    this.renderTexture.clear()
-    this.renderTexture.draw(this.light, x, y)
-}
-
-    
-
-
- 
     startDrawing(pointer){
         this.isDrawing = true;
         counter1 = counter1 + 1;
     }
 
     update(){
+        let elapsedSeconds = Math.floor(timer.getElapsedSeconds());
+        timerText.setText('Time: ' + elapsedSeconds);
         if (counter1 > 0){
             counterText.setVisible(false);
             counterText = this.add.text(13, 32,'Attempts: ' + counter1, {fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'});
-        }
-
-         
+        }       
     }
-
     keepDrawing(pointer){
         if(this.isDrawing){
             this.lineGraphics.clear();
@@ -93,7 +87,6 @@ handlePointerMove(pointer){
             this.lineGraphics.lineTo(pointer.x, pointer.y);
             this.lineGraphics.strokePath();
     }}
-    
     stopDrawing(pointer){
         this.lineGraphics.clear();
         this.isDrawing = false;
@@ -138,8 +131,6 @@ handlePointerMove(pointer){
             slicedBody.gameObject = this.add.polygon(topleft.x, topleft.y, polyObject, 0xff0000);
 
             }.bind(this));
-
-
         }
     };
     
