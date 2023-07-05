@@ -88,6 +88,7 @@ create(){
         }); 
         this.levelText = this.add.text(13, 11, 'Level 7',{fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'});
         counterText = this.add.text(13, 32, 'Attempts: ' + counter7, {fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'});
+        this.add.text(13, 52, 'Cut the blood vessel with 2 black circles', {fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'});
         
 }
     startDrawing(pointer){
