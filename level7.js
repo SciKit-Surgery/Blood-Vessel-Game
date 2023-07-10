@@ -45,24 +45,30 @@ create(){
     let graphics = this.add.graphics();
         this.path1 = new Phaser.Curves.Path(0, 150);
         this.path2 = new Phaser.Curves.Path(0, 450);
+        this.path3 = new Phaser.Curves.Path(0, 300);
 
 
         for (let i = 0; i < 8; i++)
         {
-            let path1 = this.path1.ellipseTo(60, 60, 200, 400, i % 2 === 0, 0); //black
-            let path2 = this.path2.ellipseTo(60, 40, 180, 320, i % 2 === 0, 0); //white
+            let path1 = this.path2.ellipseTo(80, 50, 160, 280, i % 2 === 0, 0); //white
+            let path2 = this.path1.ellipseTo(60, 60, 200, 400, i % 2 === 0, 0); //black
+            let path3 = this.path3.ellipseTo(60, 40, 180, 360, i % 2 === 0, 0); //white
+
         }
 
         graphics.lineStyle(40, 0xff0000, 1);
         this.path1.draw(graphics);
         this.path2.draw(graphics);
+        this.path3.draw(graphics);
         this.isDrawing = false;
 
         //circles
-        let black1 = this.add.circle(17, 212, 15, 0x000000, 1);
-        let black2 = this.add.circle(780, 525, 15, 0x000000, 1);
-        let white1 = this.add.circle(17, 478, 15, 0xFFFFFF, 1);
-        let white2 = this.add.circle(780, 235, 15, 0xFFFFFF, 1);
+        let black1 = this.add.circle(17, 470, 15, 0x000000, 1);
+        let black2 = this.add.circle(688, 30, 15, 0x000000, 1);
+        let white1 = this.add.circle(17, 215, 15, 0xFFFFFF, 1);
+        let white2 = this.add.circle(780, 525, 15, 0xFFFFFF, 1);
+        let grey1 = this.add.circle(17, 328, 15, 0x888888, 1);
+        let grey2 = this.add.circle(780, 340, 15, 0x888888, 1);
 
 
 
@@ -73,24 +79,10 @@ create(){
         this.input.on("pointerup", this.stopDrawing, this);
         this.input.on("pointermove", this.keepDrawing, this);
         this.isDrawing = false;
-        //black mask
-        let cover = this.add.rectangle(800,400,-2000,1000, 0x000000, 1);
-        //torch
-        let torch = this.add.circle(100, 100, 80, 0x000000, 1);
-        torch.visible = false;
-        const x = 400
-        const y = 300
-        cover.mask = new Phaser.Display.Masks.BitmapMask(this, torch);
-        cover.mask.invertAlpha = true;
-        this.input.on("pointermove", function (pointer){
-            let x = pointer.x;
-            let y = pointer.y
-            torch.x = x;
-            torch.y = y;
-        }); 
+       
         this.levelText = this.add.text(13, 11, 'Level 7',{fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'});
         counterText = this.add.text(13, 32, 'Attempts: ' + counter7, {fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'});
-        this.add.text(13, 72, 'Cut the blood vessel with 2 black circles', {fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'});
+        //this.add.text(13, 72, 'Cut the blood vessel with 2 black circles', {fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'});
         
         // Create and start the timer
         timer = this.time.addEvent({
@@ -110,9 +102,7 @@ create(){
         counter7 = counter7 + 1;
     }
     update(){
-        //update timer
-        let elapsedSeconds = Math.floor(timer.getElapsedSeconds());
-        timerText.setText('Time: ' + elapsedSeconds);
+        timerText.setText(timer.getElapsedSeconds().toFixed(1));
         //update counter
         if (counter7 > 0){
             counterText.setVisible(false);
