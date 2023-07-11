@@ -63,12 +63,12 @@ create(){
         this.isDrawing = false;
 
         //circles
-        let black1 = this.add.circle(17, 470, 15, 0x000000, 1);
-        let black2 = this.add.circle(688, 30, 15, 0x000000, 1);
-        let white1 = this.add.circle(17, 215, 15, 0xFFFFFF, 1);
-        let white2 = this.add.circle(780, 525, 15, 0xFFFFFF, 1);
-        let grey1 = this.add.circle(17, 328, 15, 0x888888, 1);
-        let grey2 = this.add.circle(780, 340, 15, 0x888888, 1);
+        let white1 = this.add.circle(17, 470, 15, 0xFFFFFF, 1);
+        let white2 = this.add.circle(688, 30, 15, 0x000000, 1);
+        let black1 = this.add.circle(17, 215, 15, 0x000000, 1);
+        let black2 = this.add.circle(780, 525, 15, 0x000000, 1);
+        let white3 = this.add.circle(17, 328, 15, 0x000000, 1);
+        let white4 = this.add.circle(780, 340, 15, 0xFFFFFF, 1);
 
 
 
@@ -89,10 +89,6 @@ create(){
             delay: 100000, // 3 second
             paused: false
         });
-        this.input.on('pointerup',
-            function () {
-                timer.paused = !timer.paused;
-            });
 
     timerText = this.add.text(10, 52, 'Time: 0', {fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'});
 
@@ -116,17 +112,20 @@ create(){
 
     keepDrawing(pointer){
         if(this.isDrawing){
+            let vector = new Phaser.Math.Vector2(pointer.x - pointer.downX, pointer.y - pointer.downY);
+            vector.limit(100); // maximum Length
             this.lineGraphics.clear();
             this.lineGraphics.lineStyle(15, 'black');
             this.lineGraphics.moveTo(pointer.downX, pointer.downY);
-            this.lineGraphics.lineTo(pointer.x, pointer.y);
-            this.lineGraphics.closePath();
-            this.lineGraphics.strokePath();
+            this.lineGraphics.lineTo(pointer.downX + vector.x, pointer.downY + vector.y);           
+            this.lineGraphics.stroke();
 
         }
     }
     
     stopDrawing(pointer){
+        let vector = new Phaser.Math.Vector2(pointer.x - pointer.downX, pointer.y - pointer.downY);
+        vector.limit(100); // --> Length limit
         this.isDrawing = false;
         let points = this.path1.getPoints(100);
         let drawnLine = new Phaser.Geom.Line(pointer.downX, pointer.downY, pointer.upX, pointer.upY);
@@ -134,6 +133,8 @@ create(){
             drawnLine, points);
         if (intersection && Phaser.Geom.Line.Length(drawnLine) > 45 ){
             this.levelText.setText('Level 7 complete!');
+            timer.paused = !timer.paused;
+
         }
         
     }

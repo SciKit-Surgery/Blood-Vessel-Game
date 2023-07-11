@@ -17,7 +17,7 @@ window.onload = function() {
                 gravity: {
                     y: 0
                 },
-                debug: false,
+                debug: true,
             }
         }
     }
@@ -25,101 +25,89 @@ window.onload = function() {
     window.focus();
 }
 let counter2 = 0;
-let levelText;
-let counterText; // variable for text object
-this.counterText = null;
+this.levelText;
+let counterText;
+let timer;
+let timerText;
 class scene2 extends Phaser.Scene{
     constructor(){
         super();
     }
 
+
     create(){
-        let path = [{x:600, y:20}, {x:0, y:20}, {x:0, y:80}, {x:600, y:80}];
-        this.polygon1 = this.matter.add.fromVertices(level2.config.width/2, 250, path, { isStatic: true });
-        this.polygon1.gameObject = this.add.polygon(level2.config.width/2, 250, path, '0xff0000'); // 2 = how high up the artery starts to fall
-        this.polygon2 = this.matter.add.fromVertices(level2.config.width/2, 400, path, { isStatic: true });
-        this.polygon2.gameObject = this.add.polygon(level2.config.width/2, 400, path, '0xff0000');
+    let graphics = this.add.graphics();
+        this.path1 = new Phaser.Curves.Path(0, 200);
+        this.path2 = new Phaser.Curves.Path(0, 400);
+
+
+        for (let i = 0; i < 8; i++)
+        {
+            let path1 = this.path1.ellipseTo(35, 30, 180, 360, i % 2 === 0, 0); //black
+            let path2 = this.path2.ellipseTo(35, 30, 180, 360, i % 2 === 0, 0); //white
+        }
+
+        graphics.lineStyle(40, 0xff0000, 1);
+        this.path1.draw(graphics);
+        this.path2.draw(graphics);
+        this.isDrawing = false;
+
+        //circles
+        let black1 = this.add.circle(17, 225, 15, 0x000000, 1);
+        let black2 = this.add.circle(555, 182, 15, 0x000000, 1);
+        let white1 = this.add.circle(17, 425, 15, 0xFFFFFF, 1);
+        let white2 = this.add.circle(555, 380, 15, 0x000000, 1);
+
         this.lineGraphics = this.add.graphics();
         this.input.on("pointerdown", this.startDrawing, this);
         this.input.on("pointerup", this.stopDrawing, this);
         this.input.on("pointermove", this.keepDrawing, this);
         this.isDrawing = false;
-        levelText = this.add.text(13, 11, 'Level 2',{fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'});
+        this.levelText = this.add.text(13, 11, 'Level 2',{fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'});
         counterText = this.add.text(13, 32, 'Attempts: ' + counter2, {fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'});
 
+        // Create and start the timer
+        timer = this.time.addEvent({
+            delay: 100000, // 3 second
+            paused: false
+        });
 
-    }
+        timerText = this.add.text(13, 53, '', { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
+        }
+               
     startDrawing(pointer){
         this.isDrawing = true;
         counter2 = counter2 + 1;
     }
-
     update(){
+        timerText.setText(timer.getElapsedSeconds().toFixed(1));
         if (counter2 > 0){
             counterText.setVisible(false);
-            counterText = this.add.text(13, 32,'Attempts: ' + counter2, {fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'});
+            counterText = this.add.text(13, 32,'Attempts: ' + counter2, {fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'});       
         }
     }
-
     keepDrawing(pointer){
         if(this.isDrawing){
+            let vector = new Phaser.Math.Vector2(pointer.x - pointer.downX, pointer.y - pointer.downY);
+            vector.limit(100); // maximum Length
             this.lineGraphics.clear();
-            this.lineGraphics.lineStyle(5, 'black');
+            this.lineGraphics.lineStyle(15, 'black');
             this.lineGraphics.moveTo(pointer.downX, pointer.downY);
-            this.lineGraphics.lineTo(pointer.x, pointer.y);
-            this.lineGraphics.strokePath();
+            this.lineGraphics.lineTo(pointer.downX + vector.x, pointer.downY + vector.y);           
+            this.lineGraphics.stroke();
         }
     }
     stopDrawing(pointer){
-        this.lineGraphics.clear();
-        this.isDrawing = false;
-        let bodies = this.matter.world.localWorld.bodies;
-        let toBeSliced = [];
-        let toBeCreated = [];
-        for(let i = 0; i < bodies.length; i++){
-            let vertices = bodies[i].parts[0].vertices;
-            let pointsArray = [];
-            vertices.forEach(function(vertex){
-                pointsArray.push(vertex.x, vertex.y)
-            });
-            let slicedPolygons = PolyK.Slice(pointsArray, pointer.downX, pointer.downY, pointer.upX, pointer.upY);
-
-
-            if(slicedPolygons.length > 1){
-                levelText.setVisible(false);
-                this.add.text(110, 240, 'Level 2 complete!',{fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif', fontSize: '50px'}).bringToTop();
-            };
-                
-
-                toBeSliced.push(bodies[i]);
-                slicedPolygons.forEach(function(points){
-                    toBeCreated.push(points)
-                });
-            
-        }   
-        toBeSliced.forEach(function(body){ 
-              body.gameObject.destroy();
-              this.matter.world.remove(body)
-        }.bind(this))
-        
-        toBeCreated.forEach(function(points){
-            let polyObject = [];
-            for(let i = 0; i < points.length / 2; i ++){
-                polyObject.push({
-                    x: points[i * 2] ,
-                    y: points[i * 2 + 1] 
-                })
-            }
-            let sliceCentre = Phaser.Physics.Matter.Matter.Vertices.centre(polyObject)
-            let slicedBody = this.matter.add.fromVertices(sliceCentre.x, sliceCentre.y, polyObject, { isStatic: true });
-            let topleft = this.matter.bodyBounds.getTopLeft(slicedBody); 
-            slicedBody.gameObject = this.add.polygon(topleft.x, topleft.y, polyObject, 0xff0000);
-
-
-
-            }.bind(this));
-
+        let vector = new Phaser.Math.Vector2(pointer.x - pointer.downX, pointer.y - pointer.downY);
+        vector.limit(100); // --> Length limit
+        let points = this.path1.getPoints(100);
+        let drawnLine = new Phaser.Geom.Line(pointer.downX, pointer.downY, pointer.upX, pointer.upY);
+        let intersection = Phaser.Geom.Intersects.GetLineToPoints(
+            drawnLine, points);
+        if (intersection && Phaser.Geom.Line.Length(drawnLine) > 45 ){
+            this.levelText.setText('Level 2 complete!');
+            timer.paused = !timer.paused;
         }
-    };
-    
-
+        this.isDrawing = false;
+    }
+};
