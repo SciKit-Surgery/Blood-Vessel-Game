@@ -70,15 +70,7 @@ create(){
         this.input.on("pointermove", this.keepDrawing, this);
         this.isDrawing = false;
         
-        this.levelText = this.add.text(13, 11, 'Level 6',{fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'});
-        counterText = this.add.text(13, 32, 'Attempts: ' + counter6, {fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'});
-        //this.add.text(13, 72, 'Cut the blood vessel with 2 black circles', {fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'});
         
-        // Create and start the timer
-        timer = this.time.addEvent({
-            delay: 100000, // 3 second
-            paused: false
-        });
         //black mask
         let cover = this.add.rectangle(800,400,-2000,1000, 0x000000, 1);
         //torch
@@ -95,7 +87,17 @@ create(){
             torch.y = y;
         }); 
 
-    timerText = this.add.text(10, 52, 'Time: 0', {fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'});
+        this.levelText = this.add.text(13, 11, 'Level 6',{fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'});
+        counterText = this.add.text(13, 32, 'Attempts: ' + counter6, {fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'});
+        
+
+        // Create and start the timer
+        timer = this.time.addEvent({
+            delay: 100000, // 3 second
+            paused: false
+        });
+
+        timerText = this.add.text(10, 52, 'Time: 0', {fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'});
 
 }
     startDrawing(pointer){

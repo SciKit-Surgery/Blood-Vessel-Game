@@ -95,7 +95,6 @@ create(){
         }); 
         this.levelText = this.add.text(13, 11, 'Level 8',{fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'});
         counterText = this.add.text(13, 32, 'Attempts: ' + counter8, {fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'});
-        this.add.text(13, 72, 'Cut the blood vessel with 2 black circles', {fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'});
         
         // Create and start the timer
         timer = this.time.addEvent({

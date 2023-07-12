@@ -57,14 +57,8 @@ class scene4 extends Phaser.Scene{
         this.input.on("pointerup", this.stopDrawing, this);
         this.input.on("pointermove", this.keepDrawing, this);
         this.isDrawing = false;
-        this.levelText = this.add.text(13, 11, 'Level 4',{fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'});
-        counterText = this.add.text(13, 32, 'Attempts: ' + counter4, {fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'});
-
-        // Create and start the timer
-        timer = this.time.addEvent({
-            delay: 100000, // 3 second
-            paused: false
-        });
+        
+        
         //black mask
         let cover = this.add.rectangle(800,400,-2000,1000, 0x000000, 1);
         //torch
@@ -80,6 +74,15 @@ class scene4 extends Phaser.Scene{
             torch.x = x;
             torch.y = y;
         }); 
+
+        this.levelText = this.add.text(13, 11, 'Level 4',{fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'});
+        counterText = this.add.text(13, 32, 'Attempts: ' + counter4, {fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'});
+
+        // Create and start the timer
+        timer = this.time.addEvent({
+            delay: 100000, // 3 second
+            paused: false
+        });
 
         timerText = this.add.text(13, 53, '', { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
         }
