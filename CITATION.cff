@@ -1,0 +1,13 @@
+cff-version: 1.2.0
+message: "If you use this game packages in your research, please cite it as below."
+authors:
+- family-names: "Whitley"
+  given-names: "Phoebe"
+- family-names: "Clarkson"
+  given-names: "Matthew"
+  orcid: "https://orcid.org/0000-0002-5565-1252"
+- family-names: "Thompson"
+  given-names: "Stephen"
+  orcid: "https://orcid.org/0000-0002-4706-4146"
+title: "Blood Vessel Game"
+url: "https://github.com/SciKit-Surgery/Blood-Vessel-Game"
